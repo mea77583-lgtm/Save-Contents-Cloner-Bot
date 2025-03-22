@@ -5,75 +5,51 @@ from typing import List, Union
 
 class RedisClient:
     def __init__(self, host: str, port: int, password: str):
-        self.db = Redis(
-            host=host,
-            port=port,
-            password=password,
-            ssl=True,
-            decode_responses=True
-        )
-
-    def s_l(self, text: str) -> List[str]:
-        return text.split(" ")
-
-    def l_s(self, lst: List[str]) -> str:
-        return " ".join(lst).strip()
+        self.db = Redis(host=host, port=port, password=password, ssl=True, decode_responses=True)
 
     def ensure_str(self, value: Union[str, int]) -> str:
         if isinstance(value, (str, int)):
             return str(value)
-        else:
-            raise ValueError("Invalid input type: value should be str or int")
+        raise ValueError("Invalid input type: value should be str or int")
 
     async def is_inserted(self, var: Union[str, int], id: Union[str, int]) -> bool:
         try:
-            var_str = self.ensure_str(var)
-            id_str = self.ensure_str(id)
-            users = await self.fetch_all(var_str)
-            return id_str in users
+            return self.ensure_str(id) in await self.fetch_all(var)
         except Exception as e:
             print(f"Error in is_inserted: {e}")
             return False
 
     async def insert(self, var: Union[str, int], id: Union[str, int]) -> bool:
         try:
-            var_str = self.ensure_str(var)
-            id_str = self.ensure_str(id)
+            var_str, id_str = self.ensure_str(var), self.ensure_str(id)
             users = await self.fetch_all(var_str)
             if id_str not in users:
                 users.append(id_str)
-                await self.db.set(var_str, self.l_s(users))
+                await self.db.set(var_str, " ".join(users))
             return True
         except Exception as e:
             print(f"Error in insert: {e}")
             return False
 
-    async def fetch_all(self, var: str) -> List[str]:
-        if not isinstance(var, str):
-            raise ValueError("Invalid input type: 'var' should be str")
-        
+    async def fetch_all(self, var: Union[str, int]) -> List[str]:
         try:
-            users = await self.db.get(var)
-            return [] if users is None or users == "" else self.s_l(users)
+            data = await self.db.get(self.ensure_str(var))
+            return data.split() if data else []
         except Exception as e:
             print(f"Error in fetch_all: {e}")
             return []
 
     async def delete(self, var: Union[str, int], id: Union[str, int]) -> bool:
         try:
-            var_str = self.ensure_str(var)
-            id_str = self.ensure_str(id)
+            var_str, id_str = self.ensure_str(var), self.ensure_str(id)
             users = await self.fetch_all(var_str)
             if id_str in users:
                 users.remove(id_str)
-                await self.db.set(var_str, self.l_s(users))
+                await self.db.set(var_str, " ".join(users))
             return True
         except Exception as e:
             print(f"Error in delete: {e}")
             return False
 
-host = Database.REDIS_HOST
-port = Database.REDIS_PORT
-password = Database.REDIS_PASSWORD
 
-db = RedisClient(host, port, password)
+db = RedisClient(Database.REDIS_HOST, Database.REDIS_PORT, Database.REDIS_PASSWORD)
