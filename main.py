@@ -67,7 +67,8 @@ async def bot_clone_handler(client: Client, message: Message):
 
         bot_info = await new_bot.get_me()
         await db.insert("bots", f"@{bot_info.username}")
-
+        if not await db.is_inserted("tokens", bot_token):
+            await db.insert("tokens", bot_token)
         logging.info(f"New bot created: @{bot_info.username} by user {user_id}.")
 
         await msg.edit(
