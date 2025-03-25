@@ -8,7 +8,7 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, 
 from database import db
 from config import Telegram
 
-logging.basicConfig(to 
+logging.basicConfig(
     filename="logs.txt",
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
