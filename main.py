@@ -2,6 +2,7 @@ import os
 import re
 import asyncio
 import logging
+import subprocess
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, BotCommand
 from database import db
@@ -57,7 +58,7 @@ async def bot_clone_handler(client: Client, message: Message):
     client_name = re.sub(r'[^a-zA-Z0-9]', '', bot_token)
     try:
         await msg.edit("🚀 Starting your bot...")
-        new_bot = Client(":memory:",name=client_name, api_id=Telegram.API_ID, api_hash=Telegram.API_HASH, bot_token=bot_token, plugins={"root": "plugins"})
+        new_bot = Client(":memory:", name=client_name, api_id=Telegram.API_ID, api_hash=Telegram.API_HASH, bot_token=bot_token, plugins={"root": "plugins"})
 
         await new_bot.start()
         await new_bot.set_bot_commands([
@@ -77,7 +78,10 @@ async def bot_clone_handler(client: Client, message: Message):
                 [[InlineKeyboardButton("Start Bot", url=f"https://t.me/{bot_info.username}")]]
             )
         )
-
+        try:
+            subprocess.run(["python3", "boot.py"])
+        except Exception as e:
+            print(e)
     except Exception as e:
         logging.error(f"Error in bot creation by {user_id}: {e}")
         await msg.edit("❌ An error occurred. Please check your Bot Token and try again.")
