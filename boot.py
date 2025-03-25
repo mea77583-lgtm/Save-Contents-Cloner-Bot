@@ -4,7 +4,8 @@ from database import db
 from configs import Telegram 
 
 async def start_client(token):
-    client = Client(":memory:", Telegram.API_ID, Telegram.API_HASH, bot_token=token, plugins={"root": "handlers"})
+    client_name = re.sub(r'[^a-zA-Z0-9]', '', token)
+    client = Client(":memory:", name=client_name, Telegram.API_ID, Telegram.API_HASH, bot_token=token, plugins={"root": "handlers"})
     try:
         await client.start()
         await idle()
