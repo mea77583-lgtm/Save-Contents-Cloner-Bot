@@ -1,7 +1,7 @@
 import asyncio
 from pyrogram import Client, idle
 from database import db
-from configs import Telegram 
+from config import Telegram 
 
 async def start_client(token):
     client_name = re.sub(r'[^a-zA-Z0-9]', '', token)
