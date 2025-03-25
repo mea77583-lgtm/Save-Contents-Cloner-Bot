@@ -58,7 +58,7 @@ async def bot_clone_handler(client: Client, message: Message):
     client_name = re.sub(r'[^a-zA-Z0-9]', '', bot_token)
     try:
         await msg.edit("🚀 Starting your bot...")
-        new_bot = Client(":memory:", name=client_name, api_id=Telegram.API_ID, api_hash=Telegram.API_HASH, bot_token=bot_token, plugins={"root": "plugins"})
+        new_bot = Client(in_memory=True, name=client_name, api_id=Telegram.API_ID, api_hash=Telegram.API_HASH, bot_token=bot_token, plugins={"root": "plugins"})
 
         await new_bot.start()
         await new_bot.set_bot_commands([
