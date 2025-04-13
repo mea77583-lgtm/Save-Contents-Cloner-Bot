@@ -35,13 +35,14 @@ async def start_handler(client: Client, message: Message):
 @bot.on_message(filters.private & filters.command("stats") & filters.user(Telegram.AUTH_USER_ID))
 async def stats_handler(client: Client, message: Message):
     user_count = len(await db.fetch_all("users"))
+    total_user_count = len(await db.fetch_all("total_users"))
     bot_list = await db.fetch_all("bots")
     bot_count = len(bot_list)
     bot_users = "\n".join(bot_list) if bot_list else "No bots registered."
 
     logging.info(f"Admin requested stats: {user_count} users, {bot_count} bots.")
 
-    await message.reply(f"👥 **User Count:** {user_count}\n🤖 **Bot Count:** {bot_count}\n\n**Registered Bots:**\n{bot_users}")
+    await message.reply(f"👥 **User Count:** {user_count}\n👥 **Total User Count:** {total_user_count}\n🤖 **Bot Count:** {bot_count}\n\n**Registered Bots:**\n{bot_users}")
 
 
 @bot.on_message(filters.private)
@@ -63,7 +64,8 @@ async def bot_clone_handler(client: Client, message: Message):
         await new_bot.start()
         await new_bot.set_bot_commands([
             BotCommand("start", "Start the bot"),
-            BotCommand("bulk", "Save bulk contents"),
+            BotCommand("users", "Total Users on this bot"),
+            BotCommand("source", "Source code of this bot")
         ])
 
         bot_info = await new_bot.get_me()
@@ -81,7 +83,7 @@ async def bot_clone_handler(client: Client, message: Message):
         try:
             subprocess.run(["python3", "boot.py"])
         except Exception as e:
-            print(e)
+            pass
     except Exception as e:
         logging.error(f"Error in bot creation by {user_id}: {e}")
         await msg.edit("❌ An error occurred. Please check your Bot Token and try again.")
