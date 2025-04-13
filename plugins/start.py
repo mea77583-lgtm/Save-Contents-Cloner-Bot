@@ -13,23 +13,18 @@ async def start_handler(client: Client, message: Message):
     await message.reply(
         f"**Hi {message.chat.first_name}!**\n"
         f"I am {user.first_name}, I can save messages from any **public** channel.\n"
-        "Just send me the message link, and I will fetch it for you.\n\n"
-        "**Created by** @SaveContentClonerBot."
+        "Just send me the message link, and I will send it to you.\n\n"
+        "**Created by** @SaveContentsBot."
     )
 
     if not await db.is_inserted("users", user_id):
         await db.insert("users", user_id)
 
-@Client.on_message(filters.command("bulk") & filters.private)
-async def bulk_handler(client: Client, message: Message):
+@Client.on_message(filters.command("source") & filters.private)
+async def source_handler(client: Client, message: Message):
     await message.reply(
-        "**Get the full version with premium features!**\n\n"
-        "✅ Unlimited Bulk Saving\n"
-        "✅ Private Channel & Group Support\n"
-        "✅ No Time Gaps\n"
-        "✅ Host Your Own Bot\n\n"
-        "Visit below link to purchase the source code.",
+        "You can get the source code of this bot here!",
         reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton("💰 Buy Now", url="https://shop.harshit.wtf")]]
+            [[InlineKeyboardButton("Get Now", url="https://github.com/Harshit-shrivastav/Save-Contents-Cloner-Bot")]]
         ),
   )
