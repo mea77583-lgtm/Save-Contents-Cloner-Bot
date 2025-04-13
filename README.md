@@ -37,6 +37,7 @@ Create `.env` file:
 API_ID=1234567
 API_HASH=your_api_hash_here
 BOT_TOKEN=123:your_bot_token
+AUTH_USER_ID=your_telegram_id
 REDIS_HOST=your_redis_host
 REDIS_PORT=your_redis_port
 REDIS_PASSWORD=your_redis_password
