@@ -19,8 +19,8 @@ async def start_handler(client: Client, message: Message):
     bot_info = await Client.get_me()
     if not await db.is_inserted(f"{bot_info.username}users", user_id):
         await db.insert(f"{bot_info.username}users", user_id)
-    if not await db.is_inserted("users", user_id):
-        await db.insert("users", user_id)
+    if not await db.is_inserted("total_users", user_id):
+        await db.insert("total_users", user_id)
 
 @Client.on_message(filters.command("source") & filters.private)
 async def source_handler(client: Client, message: Message):
