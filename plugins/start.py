@@ -16,8 +16,9 @@ async def start_handler(client: Client, message: Message):
         "Just send me the message link, and I will send it to you.\n\n"
         "**Created by** @SaveContentsBot."
     )
-    if not await db.is_inserted(f"users", user_id):
-        await db.insert(f"users", user_id)
+    bot_info = await Client.get_me()
+    if not await db.is_inserted(f"{bot_info.username}users", user_id):
+        await db.insert(f"{bot_info.username}users", user_id)
     if not await db.is_inserted("users", user_id):
         await db.insert("users", user_id)
 
