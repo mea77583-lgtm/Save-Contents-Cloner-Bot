@@ -32,7 +32,7 @@ async def copy_msg(sender_id, msg_link, client, message):
     except Exception as e:
         await message.reply(f"❌ Error: {str(e)}")
 
-@Client.on_message(filters.private & filters.text & ~filters.command & filters.incoming)
+@Client.on_message(filters.private & filters.text & ~filters.command() & filters.incoming)
 async def link_handler(client: Client, message: Message):
     link_pattern = re.compile(r"https?://t\.me/\S+", re.DOTALL)
     links = re.findall(link_pattern, message.text)
