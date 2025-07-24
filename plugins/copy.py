@@ -4,7 +4,6 @@ import logging
 from pyrogram import Client, filters, enums
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -43,13 +42,7 @@ async def link_handler(client: Client, message: Message):
 
     for link in links:
         if "t.me/c/" in link:
-            return await message.reply(
-                "**Only public channel links are supported.**\n\n"
-                "Get the full version with **private group support** and more!",
-                reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton("💰 Buy Now", url="https://shop.harshit.wtf")]]
-                ),
-            )
-
+            return await message.reply("❌ This bot only supports public channel message links.")
+        
         await message.reply_chat_action(enums.ChatAction.TYPING)
         await copy_msg(message.chat.id, link, client, message)
