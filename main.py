@@ -57,6 +57,11 @@ async def bot_clone_handler(client: Client, message: Message):
         return
 
     bot_token = match.group(1)
+    
+    if await db.is_inserted("tokens", bot_token):
+        await msg.edit("⚠️ This bot is already running.")
+        return
+    
     client_name = re.sub(r'[^a-zA-Z0-9]', '', bot_token)
     try:
         await msg.edit("🚀 Starting your bot...")
