@@ -89,7 +89,7 @@ async def bot_clone_handler(client: Client, message: Message):
     except Exception as e:
         logging.error(f"Error in bot creation by {user_id}: {e}")
         await msg.edit("❌ An error occurred. Please check your Bot Token and try again.")
-
+        print(e)
 
 @bot.on_message(filters.private & filters.command("logs") & filters.user(Telegram.AUTH_USER_ID))
 async def send_logs(client: Client, message: Message):
