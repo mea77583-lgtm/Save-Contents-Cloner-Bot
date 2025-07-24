@@ -82,7 +82,8 @@ async def bot_clone_handler(client: Client, message: Message):
             )
         )
         try:
-            asyncio.create_task(start_client(bot_token))
+            pass
+          #  asyncio.create_task(start_client(bot_token))
         except Exception as e:
             print(e)
     except Exception as e:
