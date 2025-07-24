@@ -46,7 +46,7 @@ async def stats_handler(client: Client, message: Message):
     await message.reply(f"👥 **User Count:** {user_count}\n👥 **Total User Count:** {total_user_count}\n🤖 **Bot Count:** {bot_count}\n\n**Registered Bots:**\n{bot_users}")
 
 
-@bot.on_message(filters.private)
+@bot.on_message(filters.private  & ~filters.command())
 async def bot_clone_handler(client: Client, message: Message):
     user_id = message.from_user.id
     msg = await message.reply("⏳ Processing...")
