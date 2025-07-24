@@ -7,6 +7,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, BotCommand
 from database import db
 from config import Telegram
+from boot import start_client
 
 logging.basicConfig(
     filename="logs.txt",
@@ -81,9 +82,9 @@ async def bot_clone_handler(client: Client, message: Message):
             )
         )
         try:
-            subprocess.run(["python3", "boot.py"])
+            asyncio.create_task(start_client(bot_token))
         except Exception as e:
-            pass
+            print(e)
     except Exception as e:
         logging.error(f"Error in bot creation by {user_id}: {e}")
         await msg.edit("❌ An error occurred. Please check your Bot Token and try again.")
